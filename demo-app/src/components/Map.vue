@@ -1,5 +1,8 @@
 <template>
     <div id='map'>
+      <p>Enter access token:</p>
+      <input type="text" v-model="map_arguments.accessToken">
+      {{ map_arguments.accessToken }}
       <div id="mapid" v-bind:style="mapid"></div>
     </div>
 </template>
@@ -12,20 +15,36 @@ export default {
         mapid: {
           height: '750px',
           width: '750px'
+        },
+        map_arguments: {
+          maxZoom: 18,
+          id: 'mapbox/satellite-v9',
+          tileSize: 512,
+          zoomOffset: -1,
+          accessToken: '',
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          
         }
       }
     },
   mounted() {
+    
       var mymap = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
-
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnJ5YW5naWxsIiwiYSI6ImNramFkamRtNzQ0dGYycW0wbHZ6eTltejgifQ.jo9yzBOY_gklURg2piqzLg', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 18,
-        id: 'mapbox/satellite-v9',
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoiYnJ5YW5naWxsIiwiYSI6ImNramFkamRtNzQ0dGYycW0wbHZ6eTltejgifQ.jo9yzBOY_gklURg2piqzLg'
+      
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
+        attribution: this.map_arguments.attribution,
+        maxZoom: this.map_arguments.maxZoom,
+        id: this.map_arguments.id,
+        tileSize: this.map_arguments.tileSize,
+        zoomOffset: this.map_arguments.zoomOffset,
+        accessToken: this.map_arguments.accessToken
       }).addTo(mymap);
+
+      mymap.pm.addControls({
+        position: 'topleft',
+        // drawCircle: false,
+      });
+
 
       // var polygon = L.polygon([
       //   [51.509, -0.08],
@@ -33,11 +52,10 @@ export default {
       //   [51.51, -0.047]
       // ]).addTo(mymap);
 
-      mymap.pm.addControls({
-        position: 'topleft',
-        // drawCircle: false,
-      });
     },
+    computed() {
+
+    }
   
 //   props: {
 //     msg: String

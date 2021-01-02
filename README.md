@@ -3,4 +3,3 @@
 - vue 3
 - vue cli
 - leaflet
-- bulma
