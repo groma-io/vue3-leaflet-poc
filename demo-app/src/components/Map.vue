@@ -1,7 +1,7 @@
 <template>
     <div id='map'>
       <p>Enter access token:</p>
-      <input id='mapToken' type="text" v-model="map_arguments.accessToken" @change='updateMap'><button>load map</button>
+      <input id='mapToken' type="text" v-model="map_arguments.accessToken"><button @click='updateMap'>load map</button>
       <div id="mapid" v-bind:style="mapid"></div>
     </div>
 </template>
@@ -81,5 +81,6 @@ export default {
   }
   #mapToken {
     margin-bottom: 20px;
+    margin-right: 10px;
   }
 </style>
