@@ -1,8 +1,7 @@
 <template>
     <div id='map'>
       <p>Enter access token:</p>
-      <input type="text" v-model="map_arguments.accessToken">
-      {{ map_arguments.accessToken }}
+      <input id='mapToken' type="text" v-model="map_arguments.accessToken" @change='updateMap'><button>load map</button>
       <div id="mapid" v-bind:style="mapid"></div>
     </div>
 </template>
@@ -12,6 +11,8 @@ export default {
   name: 'Map',
   data() {
       return {
+        tile: {},
+        map: {},
         mapid: {
           height: '750px',
           width: '750px'
@@ -29,18 +30,19 @@ export default {
     },
   mounted() {
     
-      var mymap = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
+      this.map = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
       
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
+      this.tile = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
         attribution: this.map_arguments.attribution,
         maxZoom: this.map_arguments.maxZoom,
         id: this.map_arguments.id,
         tileSize: this.map_arguments.tileSize,
         zoomOffset: this.map_arguments.zoomOffset,
-        accessToken: this.map_arguments.accessToken
-      }).addTo(mymap);
+      })
+      
+      this.tile.addTo(this.map);
 
-      mymap.pm.addControls({
+      this.map.pm.addControls({
         position: 'topleft',
         // drawCircle: false,
       });
@@ -55,8 +57,18 @@ export default {
     },
     computed() {
 
+    },
+    
+    updated() {
+      // this.tile.setUrl('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, true)
+    },
+    
+    methods: {
+      updateMap: function() {
+        this.tile.setUrl('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, false)
+        }
     }
-  
+
 //   props: {
 //     msg: String
 //   }
@@ -66,5 +78,8 @@ export default {
   #map {
     height: 100%;
     width: 100%;
+  }
+  #mapToken {
+    margin-bottom: 20px;
   }
 </style>
