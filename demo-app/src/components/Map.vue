@@ -11,8 +11,8 @@ export default {
   name: 'Map',
   data() {
       return {
-        tile: {},
-        map: {},
+        tile: null,
+        map: null,
         mapid: {
           height: '750px',
           width: '750px'
@@ -30,22 +30,22 @@ export default {
     },
   mounted() {
     
-      this.map = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
+      // this.map = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
       
-      this.tile = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
-        attribution: this.map_arguments.attribution,
-        maxZoom: this.map_arguments.maxZoom,
-        id: this.map_arguments.id,
-        tileSize: this.map_arguments.tileSize,
-        zoomOffset: this.map_arguments.zoomOffset,
-      })
+      // this.tile = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
+      //   attribution: this.map_arguments.attribution,
+      //   maxZoom: this.map_arguments.maxZoom,
+      //   id: this.map_arguments.id,
+      //   tileSize: this.map_arguments.tileSize,
+      //   zoomOffset: this.map_arguments.zoomOffset,
+      // })
       
-      this.tile.addTo(this.map);
+      // this.tile.addTo(this.map);
 
-      this.map.pm.addControls({
-        position: 'topleft',
-        // drawCircle: false,
-      });
+      // this.map.pm.addControls({
+      //   position: 'topleft',
+      //   // drawCircle: false,
+      // });
 
 
       // var polygon = L.polygon([
@@ -65,7 +65,29 @@ export default {
     
     methods: {
       updateMap: function() {
+      
+      if (this.tile === null) {
+        this.map = L.map('mapid').setView([41.712520865544, -93.79242334094275], 17); /*global L*/
+        
+        this.tile = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, {
+          attribution: this.map_arguments.attribution,
+          maxZoom: this.map_arguments.maxZoom,
+          id: this.map_arguments.id,
+          tileSize: this.map_arguments.tileSize,
+          zoomOffset: this.map_arguments.zoomOffset,
+        })
+        
+        this.tile.addTo(this.map);
+  
+        this.map.pm.addControls({
+          position: 'topleft',
+          // drawCircle: false,
+        });
+      } else {
         this.tile.setUrl('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + this.map_arguments.accessToken, false)
+      }
+
+        
         }
     }
 
